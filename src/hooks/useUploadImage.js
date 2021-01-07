@@ -1,23 +1,27 @@
 import { useState, useEffect } from 'react';
-import {db, storage} from  '../firebase';
+import { db, storage } from  '../firebase';
 		
 const useUploadImage = (file) => {
     const [uploadProgress, setUploadProgress] = useState(null);
     const [uploadedImage, setUploadedImage] = useState(null); 
-    const [status, setStatus] = useState(null);
-    const [isSucess, setIsSuccess] = useState(false);
-    const [isError, setIsError] = useState(false);
-    
+    const [error, setError] = useState(null);
+    const [isSuccess, setIsSuccess] = useState(false);
+   
     useEffect(()=>{
 		if(!file){
 			setUploadProgress(null);
 			setUploadedImage(null);
-			setStatus(null);
-			setIsError(false);
+			setError(null);
 			setIsSuccess(false);
 
 			return;
 		}
+
+		//reset enviroment
+		setError(null);
+		setIsSuccess(false);
+	
+
 		// get file reference
 		const fileRef = storage.ref(`images/${file.name}`);
 
@@ -31,16 +35,7 @@ const useUploadImage = (file) => {
 		});
 
 		// are we there yet?
-		uploadTask.then(snapshot=>{
-		
-			//let user know we are done
-			setStatus({
-				type: "success",
-				msg: "Image successfully uploaded"
-			});
-	
-			setUploadProgress(null);
-
+		uploadTask.then(snapshot=>{		
 			//rereieve URL to uploaded file
 			snapshot.ref.getDownloadURL().then(url => {
              //add uploaded file to db
@@ -53,22 +48,26 @@ const useUploadImage = (file) => {
              };
             
             db.collection('images').add(image).then(() => {
-                 //file hase been added to db
+			
+				//let user know we are done
+				setIsSuccess(true);
+				setUploadProgress(null);
+					
+				//file hase been added to db
                  setUploadedImage(image);
                  setIsSuccess(true);
 			});
 		}); 
 		}).catch(error => {
 			console.error("File upload can been uploadded!", error);
-            setIsError(true);
-            setStatus({
-				typ:"warning",
+            setError({
+				typ: "warning",
 				msg: `Image could not be uploaded (${error.code})`
 			});
 		});		
     }, [file]);
 
-    return {uploadProgress, uploadedImage, status, isSucess, isError};
+    return {uploadProgress, uploadedImage, error, isSuccess};
 }
  
 export default useUploadImage;

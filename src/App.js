@@ -1,5 +1,4 @@
 	    import React, { useEffect, useState } from 'react';
-		import {db, storage} from './firebase' 
 		import Container from 'react-bootstrap/Container';
 		import Form from 'react-bootstrap/Form';
 		import Row from 'react-bootstrap/Row';
@@ -9,7 +8,7 @@
 		import './App.scss';
 		import Photo from './components/Photo';
 		import useUploadImage from './hooks/useUploadImage';
-	    
+		import useDocData from './hooks/useDocData';
 	    
 	    const allowedFiletypes = ['image/gif', 'image/jpeg', 'image/png']
 		const maxFileSize = 5;
@@ -18,28 +17,30 @@
 		function App() {
 			const [file, setFile] = useState(null);
 			const [uploadFile, setUploadFile] = useState(null);
-			const [images, setImages]= useState([]);
 			const [alertMsg, setAlertMsg] = useState(null);
-			const {uploadProgress, uploadedImage, status} = useUploadImage(uploadFile);
+			const {images, getImages} = useDocData();
+			const {uploadProgress, uploadedImage, error, isSuccess} = useUploadImage(uploadFile);
 		
-			useEffect(() => {
+		useEffect(() => {
+			getImages();
+		},[getImages]);
+
+		useEffect(()=>{
+			if (uploadedImage) {
 				getImages();
-			},[]);
+			}
+		},[uploadedImage, getImages]);
 
-		const getImages = async () => {
-			const imgs = [];
-
-			const snapshot = await db.collection('images').get();
-			snapshot.forEach(doc => {
-				imgs.push({
-					id: doc.id,
-					...doc.data(),
+		useEffect (() => {
+			if (error) {
+				setAlertMsg(error);
+			} else if (isSuccess) {
+				setAlertMsg({
+					type: 'success', 
+					msg: 'Image succesfully uploaded.',
 				});
-			});
-			
-			setImages(imgs);
-		}
-
+			}
+		}, [isSuccess, error]);
 		 
 	const handleFileChange = e => {
 		const selectedFile = e.target.files[0];
@@ -55,16 +56,14 @@
 						filesize of ${maxFileSize} mb.`,
 					});
 					setFile(null);
-				}
-	
-			}
-			
+				}	
+			}			
 		}
 
 		const handleSubmit = e => {
 			e.preventDefault();
 			
-			if(!file) {
+			if (!file) {
 				return;
 			}
 			setUploadFile(file);
@@ -111,7 +110,7 @@
 				</div>		 
 				
 				{
-					uploadProgress !== null && (
+					uploadProgress !== null && (						
 						<ProgressBar animated variant="success" now={uploadProgress} className="mb-3" />
 					)
 				}
@@ -119,10 +118,10 @@
 				{
 					alertMsg && (<Alert variant={alertMsg.type} className="my-3">{alertMsg.msg}</Alert>)
 				}
-	
+				
 			 	<div>
-					<Button variant="primary" type="submit">Upload</Button>
-					<Button variant="secondary" type="reset">Clear</Button>
+					<Button variant="primary" className="mr-2" type="submit">Upload</Button>
+					<Button variant="secondary" type="reset">Clear</Button>	
 				</div>			
 			</Form>
     	</Container>		
