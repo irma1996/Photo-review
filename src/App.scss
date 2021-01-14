@@ -3,3 +3,27 @@
  */
 
  @import "~bootstrap/scss/bootstrap";
+
+ #dropzone{
+     background-color: #eee;
+     border-radius: 4px;
+     border: 2px dashed #aaa;
+ }
+
+
+ .drag-accept {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.drag-reject {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+
+p {
+    margin-bottom: 0;
+}

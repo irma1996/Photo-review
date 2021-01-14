@@ -1,22 +1,25 @@
 import firebase from 'firebase/app';
 import "firebase/firestore";
 import "firebase/storage";
-
+import "firebase/auth";
 
 
 //Project settings in the Firebase console 
 const firebasConfig = {
-    apiKey: "AIzaSyDcRGA2qFUe4FkVT-oxW6OrQCuQbfgQ6yQ",
-    authDomain: "photo-review-27f9e.firebaseapp.com",
-    projectId: "photo-review-27f9e",
-    storageBucket: "photo-review-27f9e.appspot.com",
-    messagingSenderId: "425369595049",
-    appId: "1:425369595049:web:e974de3dbb9bba2fda8db8",
-    measurementId: "G-YWFGLRFW19"
-}
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID
+
+};
 
 //Initialize connection to FIrebase
 firebase.initializeApp(firebasConfig);
+
+//get firebase auth instance
+const auth = firebase.auth()
 
 //initialize Firebase Firestore
 const db = firebase.firestore();
@@ -24,4 +27,4 @@ const db = firebase.firestore();
 //Initialize connection to FIrebase
 const storage= firebase.storage();
 
-export{ db, storage, firebase as default}
+export{ auth, db, storage, firebase as default}
