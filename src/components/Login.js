@@ -4,35 +4,27 @@ import {Link, useNavigate} from 'react-router-dom';
 import {useAuth} from '../contexts/AuthContext';
 
 
-const Signup = () => {
+const Login = () => {
     const emailRef = useRef()
     const passwordRef = useRef()
-    const confirmPasswordRef = useRef()
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
-    const {signup} = useAuth()
+    const {login} = useAuth()
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-
-        //have you entered sam password?
-        if (passwordRef.current.value !== confirmPasswordRef.current.value) {
-            return setError("The password does not match")     
-        }
         
         setError(null);
 
         try{
             //try to log in
-        setLoading(true)    
-         await signup(emailRef.current.value, passwordRef.current.value)
-         navigate(' / ')
-           
+            setLoading(true)    
+            await login(emailRef.current.value, passwordRef.current.value)
+            navigate(' / ')       
         }catch (e) {
             setError(e.message)
-            setLoading(false)
-            
+            setLoading(false)           
         }
        
     }
@@ -43,7 +35,7 @@ const Signup = () => {
                 <Col md= {{span: 4 , offset: 4}}>
                     <Card>
                         <Card.Body>
-                            <Card.Title>Sig Up</Card.Title>
+                            <Card.Title>Log In </Card.Title>
 
                             {error && (<Alert variant="danger">{error}</Alert>)}
                             
@@ -56,18 +48,15 @@ const Signup = () => {
                                 <Form.Group id="password">
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control type="password" ref={passwordRef} required />
-                                </Form.Group> 
-                        
-                                <Form.Group id="confirm-password">
-                                    <Form.Label>Confirm password</Form.Label>
-                                    <Form.Control type="password" ref={confirmPasswordRef} required />
-                                </Form.Group> 
-                                <Button disabled={loading} type="submit">Create Account</Button>
+                                </Form.Group>          
+                            
+                                <Button disabled={loading} type="submit">Log In</Button>
+
                             </Form>
                         </Card.Body>
                     </Card>
                     <div className="text-center mt-2">
-                        Already have an account? <Link to="/login">Log In</Link>
+                        Need an account? <Link to="/signup">Sign Up</Link>
                     </div>
                 </Col>
              </Row>       
@@ -75,4 +64,6 @@ const Signup = () => {
     )
 }
 
-export default Signup
+export default Login
+
+

@@ -7,7 +7,9 @@
 		import UploadImageDropzone from './components/UploadImageDropzone';
 		import useDocData from './hooks/useDocData';
 		import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+		import AuthRoute from './components/AuthRoute';
 		import Home from './components/Home';
+		import Login from './components/Login';
 		import Signup from './components/Signup';
 		import AuthContextProvider from './contexts/AuthContext'
 		import NavBar from './components/NavBar'; 
@@ -30,8 +32,12 @@
 							
 					<Routes>
 
-						<Route path="/"> 
+						<AuthRoute path="/"> 
 							<Home/> 
+						</AuthRoute>
+						
+						<Route path="/login"> 
+							<Login/> 
 						</Route>
 						
 						<Route path="/signup"> 
