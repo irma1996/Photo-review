@@ -8,12 +8,17 @@
 		import useDocData from './hooks/useDocData';
 		import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 		import AuthRoute from './components/AuthRoute';
+		import ForgotPassword from './components/ForgotPassword';
 		import Home from './components/Home';
 		import Login from './components/Login';
+		import Logout from './components/Logout';
 		import Signup from './components/Signup';
+		import UpdateProfile from './components/UpdateProfile';
 		import AuthContextProvider from './contexts/AuthContext'
 		import NavBar from './components/NavBar'; 
 		import NotFound from './components/NotFound';
+	
+
 			   
 		function App() {
 		const {images} = useDocData();
@@ -39,11 +44,24 @@
 						<Route path="/login"> 
 							<Login/> 
 						</Route>
+
+						<Route path="/forgot-password"> 
+							<ForgotPassword /> 
+						</Route>
+
+
+						<Route path="/logout"> 
+							<Logout/> 
+						</Route>
 						
 						<Route path="/signup"> 
 							<Signup/> 
 						</Route>
-
+						
+						<AuthRoute path="/update-profile"> 
+							<UpdateProfile /> 
+						</AuthRoute>
+						
 						<Route path="*" element= {<NotFound/>}/>
 
 					</Routes>

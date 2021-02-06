@@ -19,11 +19,28 @@ const AuthContextProvider = (props) => {
         return auth.signOut()
     }
 
+    const resetPassword = (email) => {
+        return auth.sendPasswordResetEmail(email)
+    }
+
     const signup = (email, password) => {
         //sign up
         return auth.createUserWithEmailAndPassword(email, password)
     }
 
+    const updateEmail = (email) => {
+        return currentUser.updateEmail( email)
+    }
+
+    const updatePassword = (password) =>{
+        return currentUser.updatePassword(password)
+    }
+
+    const updateProfile = (name) => {
+        return currentUser.updateProfile({ 
+            displayName: name 
+        })
+    }
 
     useEffect(() => { 
        const subscribe = auth.onAuthStateChanged(user => {
@@ -39,7 +56,11 @@ const AuthContextProvider = (props) => {
         loadingPage,
         login,
         logout,
-        signup
+        resetPassword,
+        signup,
+        updateEmail,
+        updatePassword,
+        updateProfile,
     }
 
     return(
