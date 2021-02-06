@@ -29,7 +29,8 @@ const NavBar = () => {
 							<Nav.Link href="/albums" className="nav-link">Albums</Nav.Link>
 							{
 								currentUser ? (
-									<NavDropdown title= {currentUser.email} id="basic-nav-dropdown">
+									<NavDropdown title= {currentUser.displayName || currentUser.email } 
+									id="basic-nav-dropdown">
 										<NavLink to="/update-profile" className="dropdown-item">Update Profile
 										</NavLink>
 										<NavDropdown.Divider />

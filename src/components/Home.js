@@ -10,7 +10,7 @@ const Home = () => {
     return (
          <div>               
             <p>This is my home</p>        
-            <p>You are logged in as <strong>{currentUser && currentUser.email}</strong></p>            
+            <p>You are logged in as <strong>{currentUser.uid}</strong></p>            
         </div>
     )
 }

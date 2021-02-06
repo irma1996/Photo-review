@@ -7,6 +7,9 @@
 		import UploadImageDropzone from './components/UploadImageDropzone';
 		import useDocData from './hooks/useDocData';
 		import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+		import Album from './components/albums/Album'
+		import Albums from './components/albums/Albums'
+		import CreateAlbum from './components/albums/CreateAlbum'
 		import AuthRoute from './components/AuthRoute';
 		import ForgotPassword from './components/ForgotPassword';
 		import Home from './components/Home';
@@ -41,6 +44,20 @@
 							<Home/> 
 						</AuthRoute>
 						
+						<Route path="/albums">
+							<Route path= "/">
+								<Albums/>
+							</Route>
+							
+							<AuthRoute path="/create">
+								<CreateAlbum/>
+							</AuthRoute>
+
+							<Route path="/:albumId">
+								<Album/>
+							</Route>
+						</Route>
+
 						<Route path="/login"> 
 							<Login/> 
 						</Route>

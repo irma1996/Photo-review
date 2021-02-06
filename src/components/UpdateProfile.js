@@ -37,7 +37,6 @@ const UpdateProfile = () => {
                 updateTasks.push(updateEmail(emailRef.current.value))
             }
 
-        
             //wait for all updateTasks to finish
             await Promise.all(updateTasks)
            
@@ -45,7 +44,7 @@ const UpdateProfile = () => {
                 await updatePassword(passwordRef.current.value)
             }
 
-            
+
             //  Profit
             setMessage("Profile successfully updated") 
             setLoading(false)   
