@@ -6,7 +6,7 @@ import {db} from  '../firebase';
         const [images, setImages]= useState([],)
 
        useEffect(() => {
-       const subscribe= db.collection("images").orderBy("name").onSnapshot(snapshot =>{ 
+       const unsubscribe= db.collection("images").orderBy("name").onSnapshot(snapshot =>{ 
        const imgs = [];
            
             snapshot.forEach(doc => {
@@ -17,7 +17,7 @@ import {db} from  '../firebase';
             });
             setImages(imgs);
          });
-         return subscribe;      
+         return unsubscribe;      
     },[]);
 
     return {images };

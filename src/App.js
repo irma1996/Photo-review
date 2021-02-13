@@ -6,7 +6,7 @@
 		import Photo from './components/Photo';
 		import UploadImageDropzone from './components/UploadImageDropzone';
 		import useDocData from './hooks/useDocData';
-		import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+		import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';		
 		import Album from './components/albums/Album'
 		import Albums from './components/albums/Albums'
 		import CreateAlbum from './components/albums/CreateAlbum'
@@ -48,7 +48,7 @@
 							<Route path= "/">
 								<Albums/>
 							</Route>
-							
+						
 							<AuthRoute path="/create">
 								<CreateAlbum/>
 							</AuthRoute>
