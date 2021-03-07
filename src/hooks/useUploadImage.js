@@ -1,73 +1,69 @@
-import { useState, useEffect } from 'react';
-import { db, storage } from  '../firebase';
-		
-const useUploadImage = (file) => {
-    const [uploadProgress, setUploadProgress] = useState(null);
-    const [uploadedImage, setUploadedImage] = useState(null); 
-    const [error, setError] = useState(null);
-    const [isSuccess, setIsSuccess] = useState(false);
-   
-    useEffect(()=>{
-		if(!file){
-			setUploadProgress(null);
-			setUploadedImage(null);
-			setError(null);
-			setIsSuccess(false);
+import { useState, useEffect } from "react";
+import { db, storage } from "../firebase/index";
+import { useAuth } from "../contexts/AuthContext";
 
-			return;
-		}
+const useUploadImage = (file, albumId) => {
+  const [uploadProgress, setUploadProgress] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [error, setError] = useState(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const { currentUser } = useAuth();
 
-		//reset enviroment
-		setError(null);
-		setIsSuccess(false);
-	
+  useEffect(() => {
+    if (!file) {
+      setUploadProgress(null);
+      setUploadedImage(null);
+      setError(null);
+      setIsSuccess(false);
 
-		// get file reference
-		const fileRef = storage.ref(`images/${file.name}`);
+      return;
+    }
+    setError(null);
+    setIsSuccess(false);
 
-		// put file to fileRef
-		const uploadTask = fileRef.put(file);
+    const fileRef = storage.ref(`images/${currentUser.uid}/${file.name}`);
+    const uploadTask = fileRef.put(file);
 
-		//atach listener for `state_changed-event
-		uploadTask.on('state_changed', taskSnapshot => {
-			setUploadProgress(Math.round((taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 100));
-			//console.log(`Transfered ${taskSnapshot.bytesTransferred} bytes out of ${taskSnapshot.totalBytes} which is ${progress} %.`);
-		});
+    uploadTask.on("state_changed", snap => {
+      setUploadProgress(
+        Math.round((snap.bytesTransferred / snap.totalBytes) * 100)
+      );
+    });
 
-		// are we there yet?
-		uploadTask.then(snapshot=>{		
-			//rereieve URL to uploaded file
-			snapshot.ref.getDownloadURL().then(url => {
-             //add uploaded file to db
-             const image ={
-                name: file.name,
-				path: snapshot.ref.fullPath,
-				size: file.size,
-				type:file.type,
-				url,		
-             };
-            
-            db.collection('images').add(image).then(() => {
-			
-				//let user know we are done
-				setIsSuccess(true);
-				setUploadProgress(null);
-					
-				//file hase been added to db
-                 setUploadedImage(image);
-                 setIsSuccess(true);
-			});
-		}); 
-		}).catch(error => {
-			console.error("File upload can been uploadded!", error);
-            setError({
-				typ: "warning",
-				msg: `Image could not be uploaded (${error.code})`
-			});
-		});		
-    }, [file]);
+    uploadTask
+      .then(async snapshot => {
+        const url = await snapshot.ref.getDownloadURL();
 
-    return {uploadProgress, uploadedImage, error, isSuccess};
-}
- 
+        const image = {
+          name: file.name,
+          owner: currentUser.uid,
+          path: snapshot.ref.fullPath,
+          size: file.size,
+          type: file.type,
+          url
+        };
+
+        if (albumId) {
+          image.album = [db.collection("albums").doc(albumId)];
+        }
+
+        await db.collection("images").add(image);
+
+        setIsSuccess(true);
+        setUploadProgress(null);
+        setUploadedImage(image);
+        setIsSuccess(true);
+      })
+      .catch(error => {
+        console.error("If error:", error);
+        setError({
+          type: "warning",
+          msg: `No upload! Big error (${error.code})`
+        });
+      });
+  }, [file, albumId, currentUser]);
+
+  return { uploadProgress, uploadedImage, error, isSuccess };
+};
+
 export default useUploadImage;

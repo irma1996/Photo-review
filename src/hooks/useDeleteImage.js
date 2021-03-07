@@ -1,29 +1,25 @@
-import { useEffect } from 'react'
-import { db, storage } from '../firebase'; 
-
+import { useEffect } from "react";
+import { db, storage } from "../firebase";
 
 const useDeleteImage = image => {
+  useEffect(() => {
+    if (!image) {
+      return;
+    }
 
-    useEffect(()=>{
-        if(!image) {
-            return;
-        }
-       
-       (async () =>{
-          
-         //delete document from firebase
-        await db.collection('images').doc(image.id).delete();
+    (async () => {
+      //delete document from firebase
+      await db
+        .collection("images")
+        .doc(image.id)
+        .delete();
 
-        
-        //delete picture from storage
-        await storage.ref(image.path).delete();
+      //delete picture from storage
+      await storage.ref(image.path).delete();
+    })();
+  }, [image]);
 
-       })();
-    },[image]);
-    
-    return {}
+  return {};
+};
 
-
-}
-
-export default useDeleteImage
+export default useDeleteImage;

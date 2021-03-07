@@ -1,18 +1,21 @@
-import React from 'react'
-import { useAuth } from '../contexts/AuthContext'
-
+import React from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 const Home = () => {
-    const { currentUser} = useAuth()
-    
+  const { currentUser } = useAuth();
+  return (
+    <div>
+      <p class="Welcome">Welcome</p>
+      <p class="email">
+        You are logged as{" "}
+        <strong>
+          {currentUser.displayName
+            ? currentUser.displayName
+            : currentUser.email}
+        </strong>
+      </p>
+    </div>
+  );
+};
 
-    
-    return (
-         <div>               
-            <p>This is my home</p>        
-            <p>You are logged in as <strong>{currentUser.uid}</strong></p>            
-        </div>
-    )
-}
-
-export default Home
+export default Home;
