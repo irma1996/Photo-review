@@ -19,6 +19,7 @@ import EditAlbum from "./components/albums/EditAlbum";
 import Thanks from "./components/albums/Thanks";
 import ReviewAlbum from "./components/albums/ReviewAlbum";
 
+
 function App() {
   return (
     <AuthContextProvider>
@@ -80,6 +81,7 @@ function App() {
             <AuthRoute path="/update-profile">
               <UpdateProfile />
             </AuthRoute>
+
 
             <Route path="*" element={<NotFound />} />
           </Routes>
