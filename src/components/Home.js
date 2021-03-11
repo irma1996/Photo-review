@@ -7,14 +7,15 @@ const Home = () => {
     <div>
       <p class="Welcome">Welcome</p>
       <p class="email">
-      {currentUser ? `You are logged as ${ <strong>
-          { currentUser.displayName
-              ? currentUser.displayName
-              : currentUser.email
-           }
-        </strong>}`: "welcome HERE"}
-      
-      
+        {currentUser
+          ? `You are logged as ${(
+              <strong>
+                {currentUser.displayName
+                  ? currentUser.displayName
+                  : currentUser.email}
+              </strong>
+            )}`
+          : "welcome HERE"}
       </p>
     </div>
   );
