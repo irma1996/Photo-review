@@ -32,9 +32,9 @@ function App() {
           </header>
 
           <Routes>
-            <AuthRoute exact path="/">
+            <Route exact path="/">
               <Home />
-            </AuthRoute>
+            </Route>
 
             <AuthRoute path="/albums">
               <Route path="/">
