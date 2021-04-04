@@ -36,7 +36,8 @@ const UploadYourAlbumImage = ({ albumId }) => {
       return;
     }
 
-    setUploadImage(acceptedFiles[0]);
+
+    setUploadImage(acceptedFiles);
   }, []);
 
   const {

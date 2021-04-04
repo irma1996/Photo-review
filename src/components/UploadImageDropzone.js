@@ -12,6 +12,7 @@ const UploadImageDropzone = () => {
   const { uploadProgress, error, isSuccess } = useUploadImage(uploadSomeFile);
 
   useEffect(() => {
+ 
     if (error) {
       setPosting({
         error: true,
@@ -27,16 +28,20 @@ const UploadImageDropzone = () => {
       setPosting(null);
     }
   }, [error, isSuccess]);
-
+ 
   const onDrop = useCallback(acceptedFiles => {
     setPosting(null);
+  
 
     if (acceptedFiles.length === 0) {
       return;
     }
 
-    setUploadSomefile(acceptedFiles[0]);
+
+    setUploadSomefile(acceptedFiles);
   }, []);
+
+  console.log('im working')
 
   const {
     getRootProps,
@@ -74,7 +79,7 @@ const UploadImageDropzone = () => {
             {acceptedFiles.map(file => (
               <li key={file.name}>
                 <small>
-                  {file.name} ({Math.round(file.size / 1024)} kb)
+               {file.name} ({Math.round(file.size / 1024)} kb)
                 </small>
               </li>
             ))}
